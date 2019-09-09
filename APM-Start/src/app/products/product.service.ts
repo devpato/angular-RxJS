@@ -12,18 +12,16 @@ import { SupplierService } from '../suppliers/supplier.service';
   providedIn: 'root'
 })
 export class ProductService {
-  private productsUrl = 'api/products';
+  private productsUrl = 'api/productS';
   private suppliersUrl = this.supplierService.suppliersUrl;
 
-  constructor(private http: HttpClient,
-              private supplierService: SupplierService) { }
+  constructor(private http: HttpClient, private supplierService: SupplierService) {}
 
   getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.productsUrl)
-      .pipe(
-        tap(data => console.log('Products: ', JSON.stringify(data))),
-        catchError(this.handleError)
-      );
+    return this.http.get<Product[]>(this.productsUrl).pipe(
+      tap(data => console.log('Products: ', JSON.stringify(data))),
+      catchError(this.handleError)
+    );
   }
 
   private fakeProduct() {
@@ -54,5 +52,4 @@ export class ProductService {
     console.error(err);
     return throwError(errorMessage);
   }
-
 }
