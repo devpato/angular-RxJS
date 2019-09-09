@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { Subscription, Observable, EMPTY } from 'rxjs';
 
@@ -11,7 +11,7 @@ import { catchError } from 'rxjs/operators';
   styleUrls: ['./product-list.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProductListComponent implements OnDestroy {
+export class ProductListComponent {
   pageTitle = 'Product List';
   errorMessage = '';
   categories;
@@ -25,10 +25,6 @@ export class ProductListComponent implements OnDestroy {
   );
 
   constructor(private productService: ProductService) {}
-
-  ngOnDestroy(): void {
-    this.sub.unsubscribe();
-  }
 
   onAdd(): void {
     console.log('Not yet implemented');
