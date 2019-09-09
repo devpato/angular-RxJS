@@ -4,7 +4,7 @@ import { Subscription, Observable, EMPTY, Subject, combineLatest } from 'rxjs';
 
 import { Product } from './product';
 import { ProductService } from './product.service';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, startWith } from 'rxjs/operators';
 import { ProductCategoryService } from '../product-categories/product-category.service';
 
 @Component({
@@ -19,7 +19,8 @@ export class ProductListComponent {
   sub: Subscription;
   // selectedCategoryId = 1;
   private categorySelectedSubject = new Subject<number>();
-  categorySelectedActions$ = this.categorySelectedSubject.asObservable();
+  //  private categorySelectedSubject = new BehaviorSubject<number>(null);
+  categorySelectedActions$ = this.categorySelectedSubject.asObservable().pipe(startWith(0));
 
   products$ = combineLatest([
     this.productService.productWithCategory$,
