@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { Subscription, EMPTY } from 'rxjs';
 
@@ -8,7 +8,8 @@ import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'pm-product-list',
-  templateUrl: './product-list-alt.component.html'
+  templateUrl: './product-list-alt.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProductListAltComponent {
   pageTitle = 'Products';
@@ -21,6 +22,8 @@ export class ProductListAltComponent {
       return EMPTY;
     })
   );
+
+  selectedProduct$ = this.productService.selectedProduct$;
 
   constructor(private productService: ProductService) {}
 
