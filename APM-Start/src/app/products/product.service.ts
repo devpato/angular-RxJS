@@ -39,6 +39,13 @@ export class ProductService {
     )
   );
 
+  selectedProduct$ = this.productWithCategory$.pipe(
+    map(
+      products => products.find(product => product.id === 5),
+      tap(product => console.log('selected Product ', product))
+    )
+  );
+
   constructor(
     private http: HttpClient,
     private supplierService: SupplierService,
