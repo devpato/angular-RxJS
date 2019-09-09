@@ -11,24 +11,20 @@ import { catchError } from 'rxjs/operators';
   styleUrls: ['./product-list.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProductListComponent implements OnInit, OnDestroy {
+export class ProductListComponent implements OnDestroy {
   pageTitle = 'Product List';
   errorMessage = '';
   categories;
-
-  products$: Observable<Product[]>;
   sub: Subscription;
 
-  constructor(private productService: ProductService) {}
+  products$ = this.productService.products$.pipe(
+    catchError(err => {
+      this.errorMessage = err;
+      return EMPTY;
+    })
+  );
 
-  ngOnInit(): void {
-    this.products$ = this.productService.getProducts().pipe(
-      catchError(err => {
-        this.errorMessage = err;
-        return EMPTY;
-      })
-    );
-  }
+  constructor(private productService: ProductService) {}
 
   ngOnDestroy(): void {
     this.sub.unsubscribe();
