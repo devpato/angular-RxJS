@@ -30,7 +30,7 @@
     </div>
 
     <div class="table-responsive">
-      <table class="table mb-0" *ngIf="productSuppliers">
+      <table class="table mb-0" *ngIf="productSuppliers$ | async as productSuppliers">
         <thead>
           <tr>
             <th>Supplier</th>
@@ -50,6 +50,6 @@
   </div>
 </div>
 
-<div class="alert alert-danger" *ngIf="errorMessage">
+<div class="alert alert-danger" *ngIf="errorMessage$ | async">
   {{ errorMessage }}
 </div>
