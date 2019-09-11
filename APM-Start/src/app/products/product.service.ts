@@ -21,7 +21,7 @@ export class ProductService {
   productSelectedAction$ = this.productSelectedSubject.asObservable();
 
   products$ = this.http.get<Product[]>(this.productsUrl).pipe(
-    //tap(data => console.log('Products: ', JSON.stringify(data))),
+    tap(data => console.log('Products: ', JSON.stringify(data))),
     catchError(this.handleError)
   );
 
@@ -45,7 +45,7 @@ export class ProductService {
 
   selectedProduct$ = combineLatest([this.productSelectedAction$, this.productWithCategory$]).pipe(
     map(([selectedProduct, products]) => products.find(product => product.id === selectedProduct)),
-    tap(product => console.log('selected product ', product)),
+    //tap(product => console.log('selected product ', product)),
     shareReplay(1)
   );
 
@@ -53,8 +53,8 @@ export class ProductService {
   productInserted$ = this.productInsertedSubject.asObservable();
 
   productsWithAdd$ = merge(this.productWithCategory$, this.productInserted$).pipe(
-    scan((acc: Product[], value: Product) => [...acc, value]),
-    tap(products => console.log(products))
+    scan((acc: Product[], value: Product) => [...acc, value])
+    //tap(products => console.log(products))
   );
 
   constructor(

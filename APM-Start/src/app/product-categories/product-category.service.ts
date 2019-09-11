@@ -13,7 +13,7 @@ export class ProductCategoryService {
   private productCategoriesUrl = 'api/productCategories';
 
   productCategories$ = this.http.get<ProductCategory[]>(this.productCategoriesUrl).pipe(
-    tap(data => console.log('categories', JSON.stringify(data))),
+    //tap(data => console.log('categories', JSON.stringify(data))),
     shareReplay(1), //if the component was destroyed
     catchError(this.handleError)
   );
