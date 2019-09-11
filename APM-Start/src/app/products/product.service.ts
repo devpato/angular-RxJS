@@ -1,14 +1,23 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable, throwError, BehaviorSubject, Subject, merge } from 'rxjs';
-import { catchError, tap, map, scan, shareReplay } from 'rxjs/operators';
+import { Observable, throwError, BehaviorSubject, Subject, merge, from, combineLatest } from 'rxjs';
+import {
+  catchError,
+  tap,
+  map,
+  scan,
+  shareReplay,
+  mergeMap,
+  toArray,
+  switchMap,
+  filter
+} from 'rxjs/operators';
 
 import { Product } from './product';
 import { Supplier } from '../suppliers/supplier';
 import { SupplierService } from '../suppliers/supplier.service';
 import { ProductCategoryService } from '../product-categories/product-category.service';
-import { combineLatest } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -49,12 +58,33 @@ export class ProductService {
     shareReplay(1)
   );
 
-  selectProductSupplier$ = combineLatest([
-    this.selectedProduct$,
-    this.supplierService.suppliers$
-  ]).pipe(
-    map(([selectedProduct, suppliers]) =>
-      suppliers.filter(supplier => selectedProduct.supplierIds.includes(supplier.id))
+  // selectProductSupplier$ = combineLatest([
+  //   this.selectedProduct$,
+  //   this.supplierService.suppliers$
+  // ]).pipe(
+  //   map(([selectedProduct, suppliers]) =>
+  //     suppliers.filter(supplier => selectedProduct.supplierIds.includes(supplier.id))
+  //   )
+  // );
+
+  //can leak to issues
+  // selectProductSupplier$ = this.selectedProduct$.pipe(
+  //   mergeMap(selectedProduct =>
+  //     from(selectedProduct.supplierIds).pipe(
+  //       mergeMap(supplierId => this.http.get<Supplier>(`${this.suppliersUrl}/${supplierId}`)),
+  //       toArray()
+  //     )
+  //   )
+  // );
+
+  selectProductSupplier$ = this.selectedProduct$.pipe(
+    filter(selectedProduct => Boolean(selectedProduct)),
+    switchMap(selectedProduct =>
+      from(selectedProduct.supplierIds).pipe(
+        mergeMap(supplierId => this.http.get<Supplier>(`${this.suppliersUrl}/${supplierId}`)),
+        toArray(),
+        tap(suppliers => console.log(suppliers))
+      )
     )
   );
 
