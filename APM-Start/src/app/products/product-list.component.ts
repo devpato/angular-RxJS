@@ -24,7 +24,7 @@ export class ProductListComponent {
   categorySelectedActions$ = this.categorySelectedSubject.asObservable().pipe(startWith(0));
 
   products$ = combineLatest([
-    this.productService.productWithCategory$,
+    this.productService.productsWithAdd$,
     this.categorySelectedActions$
   ]).pipe(
     map(([products, selectedCategoryId]) =>
@@ -60,11 +60,11 @@ export class ProductListComponent {
 
   onAdd(): void {
     console.log('Not yet implemented');
+    this.productService.addProduct();
   }
 
   onSelected(categoryId: string): void {
     // this.selectedCategoryId = +categoryId;
     this.categorySelectedSubject.next(+categoryId);
-    console.log('Not yet implemented');
   }
 }
